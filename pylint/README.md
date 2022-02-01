@@ -17,4 +17,7 @@ echo $?
 pylint --disable=W0614 example1.py
 
 
+## Запускаем в параллель
+
+pylint -j 4 example1.py
 
