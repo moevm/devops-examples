@@ -1,0 +1,6 @@
+Files on server (click to download):
+<div id="files">
+    {% for file in files %}
+        <li><a href="{{url_for('download', name=file)}}">{{file}}</a></li>
+    {% endfor %}    
+</div>
