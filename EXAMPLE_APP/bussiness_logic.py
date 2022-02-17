@@ -55,7 +55,7 @@ def func3():
     global len
     del len
 
-#from celery import Celery
+from celery import Celery
 def get_celery():
     return Celery(__name__)
 
