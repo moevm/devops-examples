@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  app1:
+    image: "mongo:4.0.17-xenial"
+    volumes:
+      - my_vol:/data1
+
+  app2:
+    image: "mongo:4.0.17-xenial"
+    volumes:
+      - my_vol:/data2
+
+# Будет создан новый vol
+volumes:
+  my_vol:
+
