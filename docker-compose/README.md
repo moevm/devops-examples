@@ -28,3 +28,8 @@ docker-compose -f ./docker-compose-volumes-external.yml up
 
 docker-compose -f ./docker-compose-volumes.yml up
 
+## profiles
+
+docker-compose --profile dev -f docker-compose-profiles.yml up
+
+docker-compose --profile prod -f docker-compose-profiles.yml up
