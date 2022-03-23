@@ -11,3 +11,8 @@ docker-compose -f ./docker-compose-network-default.yml up
 Задание ссылки на внешнюю сеть
 
 docker-compose -f ./docker-compose-network-external.yml up
+
+
+## healthcheck 
+
+docker-compose -f ./docker-compose-healthcheck.yml up
