@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-server
+    privileged: true
+    hostname: jenkinsserver
+    user: root
+    ports: 
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      jenkins-net:
+        aliases: 
+          - jenkins-net
+    volumes: 
+     - jenkins-data:/var/jenkins_home
+     - /var/run/docker.sock:/var/run/docker.sock
+     
+volumes: 
+  jenkins-data:
+
+networks:
+  jenkins-net:
