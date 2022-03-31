@@ -4,19 +4,19 @@ services:
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins-server
-    privileged: true 					# Настройка для возможности запуска docker из docker
+    privileged: true #Настройка для возможности запуска docker из docker
     hostname: jenkinsserver
     user: root
     ports: 
-      - "8080:8080"					# Веб-интерфейс
-      - "50000:50000"					# Порт для взаимодействия нод с контроллером
+      - "8080:8080" # Веб-интерфейс
+      - "50000:50000" # Порт для взаимодействия нод с контроллером
     networks:
       jenkins-net:
         aliases: 
           - jenkins-net
     volumes: 
-     - jenkins-data:/var/jenkins_home			# Хранилище данных и настроек 
-     - /var/run/docker.sock:/var/run/docker.sock	# Монтирование управляющего интерфейса внешнего Docker daemon
+     - jenkins-data:/var/jenkins_home # Хранилище данных и настроек 
+     - /var/run/docker.sock:/var/run/docker.sock # Монтирование управляющего интерфейса внешнего Docker daemon
      
 volumes: 
   jenkins-data:

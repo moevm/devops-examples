@@ -11,3 +11,6 @@ docker-compose up -d
 Вход в систему (отключите Ad block)
 
 http://localhost:8080/
+
+
+
