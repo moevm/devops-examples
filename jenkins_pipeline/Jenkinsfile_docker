@@ -1,0 +1,48 @@
+pipeline {
+    agent {
+        docker { image 'python:3.7' }
+    }
+
+    stages{
+        stage('Install requirements') {
+            steps {
+                sh "python3 --version"
+                sh "python3 -m pip install pylint"
+            }
+        }
+        /*
+        stage('Get source') {
+            steps {
+                git branch: 'main', url: 'https://github.com/moevm/devops-examples'
+                sh "ls -la"
+            }
+        }
+        */
+        stage('pylint test') {
+            steps {
+                echo "----- Test. Start -----"
+                sh """
+                cd pylint
+                pylint example1.py
+                """
+                echo "----- Test. End -----"
+            }
+        }
+
+        stage('Integration test') {
+            steps {
+                echo "----- Test. Start -----"
+                sh "cd integration_tests && python3 site_availability_tests.py -v"
+                echo "----- Test. End -----"
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "----- Build. Start -----"
+                sh "ls -la EXAMPLE_APP"
+                echo "----- Build. End -----"
+            }
+        }
+    }
+}

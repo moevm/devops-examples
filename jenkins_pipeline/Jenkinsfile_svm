@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages{
+        stage('Test') {
+            steps {
+                echo "----- Test. Start -----"
+                sh """
+                cd integration_tests
+                python3 site_availability_tests.py -v
+                """
+                echo "----- Test. End -----"
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo "----- Build. Start -----"
+                sh "ls -la EXAMPLE_APP"
+                echo "----- Build. End -----"
+            }
+        }
+    }
+}
