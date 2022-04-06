@@ -1,24 +1,24 @@
 pipeline {
     agent any
-    stages{
+    stages {
         stage('Get source') {
             steps {
                 git branch: 'jenkins_pipeline', url: 'https://github.com/moevm/devops-examples'
                 sh "ls -la"
             }
         }
-        
+
         stage('Test') {
             steps {
                 echo "----- Test. Start -----"
                 sh """
                 cd integration_tests
-                python3 site_availability_tests.py -v
+                python3 site_availability_tests.py - v
                 """
                 echo "----- Test. End -----"
             }
         }
-        
+
         stage('Build') {
             steps {
                 echo "----- Build. Start -----"

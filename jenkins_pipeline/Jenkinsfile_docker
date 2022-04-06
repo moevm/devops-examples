@@ -1,9 +1,11 @@
 pipeline {
     agent {
-        docker { image 'python:3.7' }
+        docker {
+            image 'python:3.7'
+        }
     }
 
-    stages{
+    stages {
         stage('Install requirements') {
             steps {
                 sh "python3 --version"
