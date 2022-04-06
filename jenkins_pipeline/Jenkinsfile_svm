@@ -6,7 +6,7 @@ pipeline {
                 echo "----- Test. Start -----"
                 sh """
                 cd integration_tests
-                python3 site_availability_tests.py - v
+                python3 site_availability_tests.py -v
                 """
                 echo "----- Test. End -----"
             }
