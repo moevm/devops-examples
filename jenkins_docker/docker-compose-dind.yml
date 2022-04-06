@@ -6,7 +6,7 @@ services:
     build: .    # собираем модифицированный образ jenkins/jenkins:lts (устанавливаем docker-cli)
     container_name: jenkins-server
     hostname: jenkinsserver
-    user: root
+    restart: always
     ports: 
       - "8080:8080"					# Веб-интерфейс
       - "50000:50000"					# Порт для взаимодействия нод с контроллером
