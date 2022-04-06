@@ -1,0 +1,25 @@
+pipeline {
+	agent none
+	stages {
+    	stage('BuildAndTest') {
+        	matrix {
+            	agent any
+            	axes {
+                	axis {
+                    	name 'arch'
+                    	values 'amd64', 'x86', 'arm'}
+                	axis {
+                    	name compiler
+                    	values 'gcc', 'clang'}
+            	}
+            	stages {
+                	stage('Build') {
+                    	steps {
+                        	echo "Build by $compiler for $arch"
+                    	}
+                	}
+            	}
+        	}
+    	}
+	}
+}
