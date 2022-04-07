@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  jenkins:
+    image: jenkins/docker
+    build: .    # собираем модифицированный образ jenkins/jenkins:lts (устанавливаем docker-cli)
+    container_name: jenkins-server
+    hostname: jenkinsserver
+    restart: always
+    ports: 
+      - "8080:8080"					# Веб-интерфейс
+      - "50000:50000"					# Порт для взаимодействия нод с контроллером
+    networks:
+      jenkins-net:
+        aliases: 
+          - jenkins-net
+    volumes: 
+     - jenkins_intro_jenkins-data:/var/jenkins_home			# Хранилище данных и настроек
+     - jenkins-docker-certs:/certs/client:ro
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+  
+  docker:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true      # Настройка для возможности запуска docker из docker
+    restart: always
+    networks:
+      jenkins-net:
+        aliases: 
+          - jenkins-net
+    ports:
+      - 2376:2376
+    volumes:
+      - jenkins_intro_jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+
+volumes:
+  jenkins-docker-certs:
+  jenkins_intro_jenkins-data:
+    external: true
+
+networks:
+  jenkins-net:

@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+    stages {
+        stage('Test Credentials') {
+            steps {
+                withCredentials([
+                    string(
+                        credentialsId: 'my-secret-text',
+                        variable: 'text'
+                    )
+                ]) {
+                    sh 'echo $text'
+                    print 'text=' + text
+                    print 'text.collect { it }=' + text.collect { it }
+                }
+            }
+        }
+    }
+}
