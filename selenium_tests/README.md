@@ -4,16 +4,17 @@
 
 https://github.com/mozilla/geckodriver/releases
 
-wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux32.tar.gz
-tar -xvzf geckodriver-v0.30.0-linux32.tar.gz
-sudo python3.7 -m pip install selenium
-
+```
+wget https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux64.tar.gz
+tar -xvzf geckodriver-v0.35.0-linux64.tar.gz
+pip install selenium
+```
 
 
 
 ## Run 
 
-PATH="./:$PATH" python3.7 main.py https://etu.ru
+PATH="./:$PATH" python main.py https://etu.ru
 
 
 ## Run headless
