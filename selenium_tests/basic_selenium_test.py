@@ -1,13 +1,17 @@
 import unittest
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
+options = Options()
+options.page_load_strategy = "eager"
+options.headless = False
 
 
 class BasicSeleniumTest(unittest.TestCase):
-
     """ TestCase classes that want to be parametrized should
         inherit from this class.
     """
-    driver = webdriver.Firefox()
+    driver = webdriver.Firefox(options=options)
 
     def __init__(self, methodName='runTest', param=None):
         super(BasicSeleniumTest, self).__init__(methodName)
