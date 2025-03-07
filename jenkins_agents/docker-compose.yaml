@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  jenkins:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: jenkins-server
+    privileged: true 					# Настройка для возможности запуска docker из docker
+    hostname: jenkinsserver
+    user: root
+    ports: 
+      - "8080:8080"					# Веб-интерфейс
+      - "50000:50000"					# Порт для взаимодействия нод с контроллером
+    networks:
+      jenkins-net:
+        aliases: 
+          - jenkins-net
+    volumes: 
+     - jenkins-data:/var/jenkins_home			# Хранилище данных и настроек 
+     - /var/run/docker.sock:/var/run/docker.sock	# Монтирование управляющего интерфейса внешнего Docker daemon
+
+  node_1:
+    user: "0:0"
+    build:
+      context: ./
+      dockerfile: ./Dockerfile_node
+    ports:
+      - "1101:22"
+    environment:
+      - NAME=NODE_1
+    networks:
+      jenkins-net:
+    volumes:
+      - ./ssh:/root/.ssh:600
+
+  node_2:
+    build:
+      dockerfile: ./Dockerfile_node
+    ports:
+      - "1102:22"
+    environment:
+      - NAME=NODE_2
+    networks:
+      jenkins-net:
+    volumes:
+      - ./ssh:/root/.ssh:600
+     
+volumes: 
+  jenkins-data:
+
+networks:
+  jenkins-net:

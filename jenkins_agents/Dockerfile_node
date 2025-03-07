@@ -1,0 +1,12 @@
+FROM archlinux:base-devel-20220410.0.52530
+
+RUN pacman -Syu vim ranger mc htop openssh jre11-openjdk --noconfirm
+
+RUN \
+echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config && \
+echo 'alias ls="ls --color=auto"' >> /etc/bash.bashrc && \
+echo 'PS1="\e[35m$PS1\e[0m" ' >> /etc/bash.bashrc 
+
+RUN /usr/bin/ssh-keygen -A
+
+CMD /usr/sbin/sshd -D
