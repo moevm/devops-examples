@@ -12,4 +12,4 @@ ARG INVALIDATOR="1111"
 RUN echo "ifdfdfsfsd"
 
 
-CMD echo "Hello World"
+CMD ["echo", "Hello World"]
