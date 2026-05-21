@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Задачи{% endblock %}
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <h2>Задачи</h2>
+  <a href="/task/new" class="btn btn-primary">+ Новая задача</a>
+</div>
+
+<div class="card">
+  <form method="get" style="display:flex; gap:12px; flex-wrap:wrap;">
+    <div>
+      <label style="font-size:13px;">Приоритет</label>
+      <select name="priority" onchange="this.form.submit()">
+        <option value="">Все</option>
+        <option value="high" {% if priority=='high' %}selected{% endif %}>Высокий</option>
+        <option value="medium" {% if priority=='medium' %}selected{% endif %}>Средний</option>
+        <option value="low" {% if priority=='low' %}selected{% endif %}>Низкий</option>
+      </select>
+    </div>
+    <div>
+      <label style="font-size:13px;">Статус</label>
+      <select name="status" onchange="this.form.submit()">
+        <option value="">Все</option>
+        <option value="todo" {% if status=='todo' %}selected{% endif %}>К выполнению</option>
+        <option value="in_progress" {% if status=='in_progress' %}selected{% endif %}>В работе</option>
+        <option value="done" {% if status=='done' %}selected{% endif %}>Готово</option>
+      </select>
+    </div>
+    {% if priority or status %}
+      <div style="align-self:flex-end;">
+        <a href="/" class="btn btn-secondary btn-sm">Сбросить</a>
+      </div>
+    {% endif %}
+  </form>
+</div>
+
+{% if tasks %}
+  {% for task in tasks %}
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <a href="/task/{{ task.id }}" style="font-size:16px; font-weight:bold; color:#2c3e50; text-decoration:none;">
+          {{ task.title }}
+        </a>
+        {% if task.description %}
+          <p style="font-size:13px; color:#666; margin-top:4px;">{{ task.description[:120] }}{% if task.description|length > 120 %}…{% endif %}</p>
+        {% endif %}
+        <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <span class="badge badge-{{ task.priority }}">{{ task.priority }}</span>
+          <span class="badge badge-{{ task.status }}">{{ task.status }}</span>
+          {% if task.due_date %}<span style="font-size:12px; color:#888;">до {{ task.due_date }}</span>{% endif %}
+          <span style="font-size:12px; color:#aaa;">{{ task.created_at.strftime('%d.%m.%Y') }}</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; flex-shrink:0;">
+        <a href="/task/{{ task.id }}/edit" class="btn btn-secondary btn-sm">Изменить</a>
+        <form method="post" action="/task/{{ task.id }}/delete" style="display:inline;"
+              onsubmit="return confirm('Удалить задачу?')">
+          <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+        </form>
+      </div>
+    </div>
+    <div style="margin-top:10px; display:flex; gap:6px;">
+      <form method="post" action="/task/{{ task.id }}/status">
+        <input type="hidden" name="status" value="todo">
+        <button type="submit" class="btn btn-sm" style="background:#eaf2ff;color:#2471a3;">К выполнению</button>
+      </form>
+      <form method="post" action="/task/{{ task.id }}/status">
+        <input type="hidden" name="status" value="in_progress">
+        <button type="submit" class="btn btn-sm" style="background:#fdf2e9;color:#d35400;">В работе</button>
+      </form>
+      <form method="post" action="/task/{{ task.id }}/status">
+        <input type="hidden" name="status" value="done">
+        <button type="submit" class="btn btn-sm" style="background:#eafaf1;color:#1e8449;">Готово</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="card" style="text-align:center; color:#888; padding:40px;">
+    Задач нет. <a href="/task/new">Создать первую</a>
+  </div>
+{% endif %}
+
+{% endblock %}

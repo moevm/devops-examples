@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+
+<h2 style="margin-bottom:20px;">Поиск задач</h2>
+
+<div class="card">
+  <form method="get" action="/search" class="search-bar">
+    <input type="text" name="q" value="{{ q }}" placeholder="Введите текст для поиска..." autofocus>
+    <button type="submit" class="btn btn-primary">Найти</button>
+    {% if q %}<a href="/search" class="btn btn-secondary">Сбросить</a>{% endif %}
+  </form>
+</div>
+
+{% if q %}
+  <p style="margin-bottom:16px; color:#666;">
+    Результаты по запросу «<strong>{{ q }}</strong>»: {{ tasks|length }} задач
+  </p>
+  {% if tasks %}
+    {% for task in tasks %}
+    <div class="card">
+      <a href="/task/{{ task.id }}" style="font-size:16px; font-weight:bold; color:#2c3e50; text-decoration:none;">
+        {{ task.title }}
+      </a>
+      {% if task.description %}
+        <p style="font-size:13px; color:#666; margin-top:4px;">{{ task.description[:150] }}{% if task.description|length > 150 %}…{% endif %}</p>
+      {% endif %}
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <span class="badge badge-{{ task.priority }}">{{ task.priority }}</span>
+        <span class="badge badge-{{ task.status }}">{{ task.status }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="card" style="text-align:center; color:#888; padding:30px;">
+      Ничего не найдено
+    </div>
+  {% endif %}
+{% endif %}
+
+{% endblock %}

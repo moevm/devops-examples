@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Task Manager{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+  <span class="brand">Task Manager</span>
+  <a href="/">Все задачи</a>
+  <a href="/task/new">+ Новая задача</a>
+  <a href="/search">Поиск</a>
+</nav>
+
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- Monkey Testing Panel -->
+<div id="monkey-panel">
+  <h4>Monkey Testing</h4>
+  <label>Действий в секунду: <span id="fps-val">5</span></label>
+  <input type="range" id="fps" min="1" max="30" value="5">
+  <label>
+    <input type="checkbox" id="cb-click" checked> Клики
+  </label>
+  <label>
+    <input type="checkbox" id="cb-form" checked> Заполнение форм
+  </label>
+  <label>
+    <input type="checkbox" id="cb-scroll" checked> Скроллинг
+  </label>
+  <div class="monkey-btns">
+    <button id="btn-start">▶ Старт</button>
+    <button id="btn-stop">■ Стоп</button>
+  </div>
+  <div id="monkey-status">Готов к тесту</div>
+</div>
+
+<script src="https://unpkg.com/gremlins.js@2.2.0"></script>
+<script>
+  document.getElementById('fps').addEventListener('input', function() {
+    document.getElementById('fps-val').textContent = this.value;
+  });
+
+  let horde = null;
+
+  document.getElementById('btn-start').addEventListener('click', function() {
+    const fps = parseInt(document.getElementById('fps').value);
+    const useClick = document.getElementById('cb-click').checked;
+    const useForm = document.getElementById('cb-form').checked;
+    const useScroll = document.getElementById('cb-scroll').checked;
+
+    const species = [];
+    if (useClick) species.push(gremlins.species.clicker());
+    if (useForm)  species.push(gremlins.species.formFiller());
+    if (useScroll) species.push(gremlins.species.scroller());
+    if (species.length === 0) {
+      document.getElementById('monkey-status').textContent = 'Выберите хотя бы одно действие';
+      return;
+    }
+
+    horde = gremlins.createHorde({
+      species: species,
+      mogwais: [gremlins.mogwais.alert(), gremlins.mogwais.gizmo({ fps })],
+      strategies: [gremlins.strategies.distribution({ delay: Math.floor(1000 / fps) })],
+    });
+
+    horde.unleash();
+
+    document.getElementById('btn-start').style.display = 'none';
+    document.getElementById('btn-stop').style.display = 'block';
+    document.getElementById('monkey-status').textContent = 'Обезьяны атакуют...';
+  });
+
+  document.getElementById('btn-stop').addEventListener('click', function() {
+    if (horde) { horde.stop(); horde = null; }
+    document.getElementById('btn-start').style.display = 'block';
+    document.getElementById('btn-stop').style.display = 'none';
+    document.getElementById('monkey-status').textContent = 'Остановлено';
+  });
+</script>
+
+</body>
+</html>

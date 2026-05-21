@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block content %}
+
+<div style="margin-bottom:16px;">
+  <a href="/" style="color:#3498db; text-decoration:none;">← Все задачи</a>
+</div>
+
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <h2>{{ task.title }}</h2>
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <span class="badge badge-{{ task.priority }}">{{ task.priority }}</span>
+        <span class="badge badge-{{ task.status }}">{{ task.status }}</span>
+        {% if task.due_date %}<span style="font-size:13px; color:#888;">до {{ task.due_date }}</span>{% endif %}
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <a href="/task/{{ task.id }}/edit" class="btn btn-secondary btn-sm">Изменить</a>
+      <form method="post" action="/task/{{ task.id }}/delete" onsubmit="return confirm('Удалить задачу?')">
+        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+      </form>
+    </div>
+  </div>
+
+  {% if task.description %}
+    <p style="margin-top:16px; color:#555; line-height:1.6;">{{ task.description }}</p>
+  {% endif %}
+
+  <div style="margin-top:20px; border-top:1px solid #eee; padding-top:16px;">
+    <p style="font-size:13px; color:#aaa;">Создана: {{ task.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-bottom:12px;">Изменить статус</h3>
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <form method="post" action="/task/{{ task.id }}/status">
+      <input type="hidden" name="status" value="todo">
+      <button type="submit" class="btn btn-sm" style="background:#eaf2ff;color:#2471a3;">К выполнению</button>
+    </form>
+    <form method="post" action="/task/{{ task.id }}/status">
+      <input type="hidden" name="status" value="in_progress">
+      <button type="submit" class="btn btn-sm" style="background:#fdf2e9;color:#d35400;">В работе</button>
+    </form>
+    <form method="post" action="/task/{{ task.id }}/status">
+      <input type="hidden" name="status" value="done">
+      <button type="submit" class="btn btn-sm" style="background:#eafaf1;color:#1e8449;">Готово</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-bottom:16px;">Комментарии ({{ comments|length }})</h3>
+
+  {% for comment in comments %}
+  <div style="border-bottom:1px solid #f0f0f0; padding:10px 0;">
+    <p style="font-size:14px;">{{ comment.text }}</p>
+    <p style="font-size:11px; color:#aaa; margin-top:4px;">{{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+  </div>
+  {% else %}
+  <p style="color:#aaa; font-size:14px;">Комментариев нет</p>
+  {% endfor %}
+
+  <form method="post" action="/task/{{ task.id }}/comment" style="margin-top:16px;">
+    <div class="form-group">
+      <label for="comment-text">Добавить комментарий</label>
+      <textarea id="comment-text" name="text" placeholder="Введите комментарий..." style="height:70px;"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary btn-sm">Добавить</button>
+  </form>
+</div>
+
+{% endblock %}
